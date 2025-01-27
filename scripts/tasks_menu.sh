@@ -34,7 +34,7 @@ Low" | fzf --prompt="Priority (H/M/L)> ")
         High) priority="High";;
         Medium) priority="Medium";;
         Low) priority="Low";;
-        *) echo "Please enter H, M, or L";;
+        *) log "ERROR" "Invalid priority selected"; return 1;;
     esac
     
     # Get due date
@@ -54,11 +54,13 @@ Low" | fzf --prompt="Priority (H/M/L)> ")
         sed -i "s/Priority: .*/Priority: $priority/" "$filepath"
         sed -i "s/Due Date: .*/Due Date: $due_date/" "$filepath"
         sed -i "s/Status: .*/Status: Todo/" "$filepath"
-        sed -i "s/Created: .*/Created: $(date +%Y-%m-%d\ %H:%M:%S)/" "$filepath"
+        sed -i "s/Created: .*/Created: $(date +%Y-%m-%d %H:%M:%S)/" "$filepath"
         
         # Open task in editor
         ${EDITOR:-nano} "$filepath"
         log "INFO" "Task created: $filepath"
+    else
+        log "ERROR" "Failed to create task from template"
     fi
 }
 
@@ -143,14 +145,22 @@ list_tasks() {
     if [ -d "$TASKS_DIR" ] && [ "$(ls -A "$TASKS_DIR")" ]; then
         echo "Status  Due Date   Priority  Title"
         echo "--------------------------------"
-        for task in "$TASKS_DIR"/*md; do
-            if [ -f "$task" ]; then
-                local status=$(grep "Status:" "$task" | cut -d' ' -f2-)
-                local due_date=$(grep "Due Date:" "$task" | cut -d' ' -f3-)
-                local priority=$(grep "Priority:" "$task" | cut -d' ' -f2-)
-                local title=$(grep "Title:" "$task" | cut -d' ' -f2-)
-                printf "%-8s %-10s %-9s %s\n" "$status" "$due_date" "$priority" "$title"
-            fi
+        
+        local priorities=("High" "Medium" "Low")
+        for priority in "${priorities[@]}"; do
+            echo "Tasks with priority: $priority"
+            for task in "$TASKS_DIR"/*md; do
+                if [ -f "$task" ]; then
+                    local task_priority=$(grep "Priority:" "$task" | cut -d' ' -f2-)
+                    if [ "$task_priority" = "$priority" ]; then
+                        local status=$(grep "Status:" "$task" | cut -d' ' -f2-)
+                        local due_date=$(grep "Due Date:" "$task" | cut -d' ' -f3-)
+                        local title=$(grep "Title:" "$task" | cut -d' ' -f2-)
+                        printf "%-8s %-10s %-9s %s\n" "$status" "$due_date" "$priority" "$title"
+                    fi
+                fi
+            done
+            echo
         done
     else
         echo "No tasks found."

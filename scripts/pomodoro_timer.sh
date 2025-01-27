@@ -43,12 +43,21 @@ start_timer() {
     echo
     read -p "Press Enter to start..."
     
+    # Play sound at start
+    if command -v paplay &> /dev/null; then
+        paplay /home/user/.config/sounds/start.wav &> /dev/null || true
+    elif command -v aplay &> /dev/null; then
+        aplay /home/user/.config/sounds/end.wav &> /dev/null || true
+    fi
+    
     # Work period
     show_countdown "$WORK_DURATION" "Work Time"
     
     # Play sound if available
     if command -v paplay &> /dev/null; then
         paplay /usr/share/sounds/freedesktop/stereo/complete.oga &> /dev/null || true
+    elif command -v aplay &> /dev/null; then
+        aplay /usr/share/sounds/freedesktop/stereo/complete.oga &> /dev/null || true
     fi
     
     clear
