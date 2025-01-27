@@ -1,0 +1,7 @@
+Title: 
+Priority: (High/Medium/Low)
+Due Date: 
+Status: (Todo/In Progress/Done)
+Pomodoros: 0
+
+Description:
