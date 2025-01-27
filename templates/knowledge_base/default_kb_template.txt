@@ -1,7 +1,0 @@
-Title: 
-Category: 
-Tags: 
-Created: $(date +%Y-%m-%d)
-Last Modified: $(date +%Y-%m-%d)
-
-Content:

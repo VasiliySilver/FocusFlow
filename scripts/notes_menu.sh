@@ -16,7 +16,7 @@ create_note() {
     # Select template
     local template=$(select_template "notes")
     if [ -z "$template" ]; then
-        template="$TEMPLATES_DIR/default_note_template.txt"
+        template="$TEMPLATES_DIR/default_note_templatemd"
     fi
     
     # Get note title
@@ -28,10 +28,11 @@ create_note() {
     
     # Create safe filename
     local filename="$(get_safe_filename "$title")"
-    local filepath="$NOTES_DIR/${filename}_$(date +%Y%m%d).txt"
+    local filepath="$NOTES_DIR/${filename}_$(date +%Y%m%d)md"
     
     # Create note from template
     if create_from_template "$template" "$filepath"; then
+        sed -i "s/Date: .*/Date: $(date +%Y-%m-%d\ %H:%M:%S)/" "$filepath"
         # Open note in default editor
         ${EDITOR:-nano} "$filepath"
         log "INFO" "Note created: $filepath"
@@ -76,7 +77,7 @@ list_notes() {
     print_title "All Notes"
     
     if [ -d "$NOTES_DIR" ] && [ "$(ls -A "$NOTES_DIR")" ]; then
-        ls -lt "$NOTES_DIR" | grep "\.txt$" | while read -r line; do
+        ls -lt "$NOTES_DIR" | grep "\md$" | while read -r line; do
             echo "$line" | awk '{print $6, $7, $8, $9}'
         done
     else
@@ -96,10 +97,19 @@ display_notes_menu() {
         echo "3. View Note"
         echo "4. Delete Note"
         echo "5. List All Notes"
+        echo "6. Create Template"
+        echo "7. Edit Template"
         echo "0. Back to Main Menu"
         echo
         
-        read -p "Select an option: " choice
+        local choice=$(echo "1. Create Note
+2. Edit Note
+3. View Note
+4. Delete Note
+5. List All Notes
+6. Create Template
+7. Edit Template
+0. Back to Main Menu" | fzf --prompt="Select an option> " | cut -d'.' -f1)
         
         case $choice in
             1)
@@ -116,6 +126,12 @@ display_notes_menu() {
                 ;;
             5)
                 list_notes
+                ;;
+            6)
+                create_template "notes"
+                ;;
+            7)
+                edit_template "notes"
                 ;;
             0)
                 return 0

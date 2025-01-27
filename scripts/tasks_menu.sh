@@ -16,7 +16,7 @@ create_task() {
     # Select template
     local template=$(select_template "tasks")
     if [ -z "$template" ]; then
-        template="$TEMPLATES_DIR/default_task_template.txt"
+        template="$TEMPLATES_DIR/default_task_templatemd"
     fi
     
     # Get task details
@@ -27,31 +27,26 @@ create_task() {
     fi
     
     # Get priority
-    local priority
-    while true; do
-        read -p "Priority (H/M/L): " priority
-        case $priority in
-            [Hh]) priority="High"; break ;;
-            [Mm]) priority="Medium"; break ;;
-            [Ll]) priority="Low"; break ;;
-            *) echo "Please enter H, M, or L" ;;
-        esac
-    done
+    local priority=$(echo "High
+Medium
+Low" | fzf --prompt="Priority (H/M/L)> ")
+    case $priority in
+        High) priority="High";;
+        Medium) priority="Medium";;
+        Low) priority="Low";;
+        *) echo "Please enter H, M, or L";;
+    esac
     
     # Get due date
-    local due_date
-    while true; do
-        read -p "Due date (YYYY-MM-DD): " due_date
-        if validate_date "$due_date"; then
-            break
-        else
-            echo "Please enter a valid date in YYYY-MM-DD format"
-        fi
-    done
+    local due_date=$(date +%Y-%m-%d | fzf --prompt="Due date (YYYY-MM-DD)> ")
+    if ! validate_date "$due_date"; then
+        echo "Please enter a valid date in YYYY-MM-DD format"
+        return 1
+    fi
     
     # Create safe filename
     local filename="$(get_safe_filename "$title")"
-    local filepath="$TASKS_DIR/${filename}_${due_date}.txt"
+    local filepath="$TASKS_DIR/${filename}_${due_date}md"
     
     # Create task from template
     if create_from_template "$template" "$filepath"; then
@@ -59,6 +54,7 @@ create_task() {
         sed -i "s/Priority: .*/Priority: $priority/" "$filepath"
         sed -i "s/Due Date: .*/Due Date: $due_date/" "$filepath"
         sed -i "s/Status: .*/Status: Todo/" "$filepath"
+        sed -i "s/Created: .*/Created: $(date +%Y-%m-%d\ %H:%M:%S)/" "$filepath"
         
         # Open task in editor
         ${EDITOR:-nano} "$filepath"
@@ -95,15 +91,14 @@ update_task_status() {
         grep "Status:" "$task"
         echo
         
-        local status
-        select status in "Todo" "In Progress" "Done"; do
-            if [ -n "$status" ]; then
-                backup_file "$task"
-                sed -i "s/Status: .*/Status: $status/" "$task"
-                log "INFO" "Updated task status: $task"
-                break
-            fi
-        done
+        local status=$(echo "Todo
+In Progress
+Done" | fzf --prompt="Select status> ")
+        if [ -n "$status" ]; then
+            backup_file "$task"
+            sed -i "s/Status: .*/Status: $status/" "$task"
+            log "INFO" "Updated task status: $task"
+        fi
     fi
 }
 
@@ -148,7 +143,7 @@ list_tasks() {
     if [ -d "$TASKS_DIR" ] && [ "$(ls -A "$TASKS_DIR")" ]; then
         echo "Status  Due Date   Priority  Title"
         echo "--------------------------------"
-        for task in "$TASKS_DIR"/*.txt; do
+        for task in "$TASKS_DIR"/*md; do
             if [ -f "$task" ]; then
                 local status=$(grep "Status:" "$task" | cut -d' ' -f2-)
                 local due_date=$(grep "Due Date:" "$task" | cut -d' ' -f3-)
@@ -176,10 +171,21 @@ display_tasks_menu() {
         echo "5. Start Pomodoro Timer"
         echo "6. Delete Task"
         echo "7. List All Tasks"
+        echo "8. Create Template"
+        echo "9. Edit Template"
         echo "0. Back to Main Menu"
         echo
         
-        read -p "Select an option: " choice
+        local choice=$(echo "1. Create Task
+2. Edit Task
+3. View Task
+4. Update Task Status
+5. Start Pomodoro Timer
+6. Delete Task
+7. List All Tasks
+8. Create Template
+9. Edit Template
+0. Back to Main Menu" | fzf --prompt="Select an option> " | cut -d'.' -f1)
         
         case $choice in
             1)
@@ -202,6 +208,12 @@ display_tasks_menu() {
                 ;;
             7)
                 list_tasks
+                ;;
+            8)
+                create_template "tasks"
+                ;;
+            9)
+                edit_template "tasks"
                 ;;
             0)
                 return 0

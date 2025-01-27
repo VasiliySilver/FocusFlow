@@ -16,7 +16,7 @@ touch "$BASE_DIR"/{install.sh,uninstall.sh,backup.sh,main_menu.sh}
 touch "$BASE_DIR"/scripts/{notes_menu.sh,tasks_menu.sh,kb_menu.sh,search.sh,pomodoro_timer.sh,utils.sh}
 
 # Create default templates
-cat > "$BASE_DIR/templates/notes/default_note_template.txt" << 'EOF'
+cat > "$BASE_DIR/templates/notes/default_note_templatemd" << 'EOF'
 Title: 
 Date: $(date +%Y-%m-%d)
 Tags: 
@@ -24,7 +24,7 @@ Tags:
 Content:
 EOF
 
-cat > "$BASE_DIR/templates/tasks/default_task_template.txt" << 'EOF'
+cat > "$BASE_DIR/templates/tasks/default_task_templatemd" << 'EOF'
 Title: 
 Priority: (High/Medium/Low)
 Due Date: 
@@ -34,7 +34,7 @@ Pomodoros: 0
 Description:
 EOF
 
-cat > "$BASE_DIR/templates/knowledge_base/default_kb_template.txt" << 'EOF'
+cat > "$BASE_DIR/templates/knowledge_base/default_kb_templatemd" << 'EOF'
 Title: 
 Category: 
 Tags: 

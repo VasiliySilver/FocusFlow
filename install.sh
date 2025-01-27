@@ -14,7 +14,10 @@ install_focusflow() {
     mkdir -p "$BIN_DIR"
     
     # Copy files
-    cp -r "$REPO_DIR"/* "$INSTALL_DIR/"
+    cp -r "$REPO_DIR/config" "$INSTALL_DIR/"
+    cp -r "$REPO_DIR/data" "$INSTALL_DIR/"
+    cp -r "$REPO_DIR/scripts" "$INSTALL_DIR/"
+    cp -r "$REPO_DIR/templates" "$INSTALL_DIR/"
     
     # Create launcher script
     cat > "$BIN_DIR/focusflow" << EOF
@@ -53,4 +56,3 @@ EOF
 
 # Run installation
 install_focusflow
-

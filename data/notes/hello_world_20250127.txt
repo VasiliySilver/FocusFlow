@@ -1,5 +1,5 @@
 Title: 
-Date: $(date +%Y-%m-%d)
+Date: 2025-01-27
 Tags: 
 
 Content:

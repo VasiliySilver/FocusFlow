@@ -91,7 +91,7 @@ select_file() {
     local dir="$1"
     local prompt="${2:-Select a file}"
     
-    find "$dir" -type f -name "*.txt" | fzf --prompt="$prompt> "
+    find "$dir" -type f -name "*md" | fzf --prompt="$prompt> "
 }
 
 # Validate date format (YYYY-MM-DD)
@@ -143,7 +143,7 @@ create_from_template() {
     mkdir -p "$(dirname "$output_file")"
     
     # Copy template and replace date placeholders
-    sed "s/\$(date +%Y-%m-%d)/$(date +%Y-%m-%d)/g" "$template" > "$output_file"
+    sed "s/\$(date +%Y-%m-%d)/$(date +%Y-%m-%d)/g; s/\$(date +%Y-%m-%d %H:%M:%S)/$(date +%Y-%m-%d %H:%M:%S)/g" "$template" > "$output_file"
     
     if [ $? -eq 0 ]; then
         log "INFO" "Created new file: $output_file"
@@ -162,6 +162,55 @@ file_exists() {
         return 1
     fi
     return 0
+}
+
+# Create a new template
+create_template() {
+    local type="$1" # notes, tasks, or knowledge_base
+    local templates_dir="$BASE_DIR/templates/$type"
+    
+    read -p "Enter template name: " template_name
+    if [ -z "$template_name" ]; then
+        log "ERROR" "Template name cannot be empty"
+        return 1
+    fi
+    
+    local filename="$(get_safe_filename "$template_name")"
+    local filepath="$templates_dir/${filename}md"
+    
+    if [ -f "$filepath" ]; then
+        log "ERROR" "Template already exists: $filepath"
+        return 1
+    fi
+    
+    touch "$filepath"
+    ${EDITOR:-nano} "$filepath"
+    
+    if [ $? -eq 0 ]; then
+        log "INFO" "Created new template: $filepath"
+        return 0
+    else
+        log "ERROR" "Failed to create template: $filepath"
+        return 1
+    fi
+}
+
+# Edit a template
+edit_template() {
+    local type="$1" # notes, tasks, or knowledge_base
+    local templates_dir="$BASE_DIR/templates/$type"
+    
+    local template=$(select_file "$templates_dir" "Select template to edit")
+    if [ -n "$template" ]; then
+        ${EDITOR:-nano} "$template"
+        if [ $? -eq 0 ]; then
+            log "INFO" "Template edited: $template"
+            return 0
+        else
+            log "ERROR" "Failed to edit template: $template"
+            return 1
+        fi
+    fi
 }
 
 # Backup single file

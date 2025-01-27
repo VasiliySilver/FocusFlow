@@ -16,7 +16,7 @@ create_kb_entry() {
     # Select template
     local template=$(select_template "knowledge_base")
     if [ -z "$template" ]; then
-        template="$TEMPLATES_DIR/default_kb_template.txt"
+        template="$TEMPLATES_DIR/default_kb_templatemd"
     fi
     
     # Get entry details
@@ -31,13 +31,15 @@ create_kb_entry() {
     
     # Create safe filename
     local filename="$(get_safe_filename "$title")"
-    local filepath="$KB_DIR/${category:+${category}_}${filename}.txt"
+    local filepath="$KB_DIR/${category:+${category}_}${filename}md"
     
     # Create entry from template
     if create_from_template "$template" "$filepath"; then
         # Update entry details
         sed -i "s/Category: .*/Category: $category/" "$filepath"
         sed -i "s/Tags: .*/Tags: $tags/" "$filepath"
+        sed -i "s/Created: .*/Created: $(date +%Y-%m-%d\ %H:%M:%S)/" "$filepath"
+        sed -i "s/Last Modified: .*/Last Modified: $(date +%Y-%m-%d\ %H:%M:%S)/" "$filepath"
         
         # Open entry in editor
         ${EDITOR:-nano} "$filepath"
@@ -71,7 +73,7 @@ list_by_category() {
     print_title "List Entries by Category"
     
     # Get unique categories
-    local categories=$(find "$KB_DIR" -type f -name "*.txt" -exec grep "Category:" {} \; | cut -d' ' -f2- | sort -u)
+    local categories=$(find "$KB_DIR" -type f -name "*md" -exec grep "Category:" {} \; | cut -d' ' -f2- | sort -u)
     
     if [ -z "$categories" ]; then
         echo "No categories found."
@@ -83,14 +85,12 @@ list_by_category() {
     echo "$categories" | nl
     echo
     
-    read -p "Select category number (or Enter to see all): " choice
-    echo
+    local selected_category=$(echo "$categories" | fzf --prompt="Select category (or Enter to see all)> ")
     
-    if [ -n "$choice" ]; then
-        local selected_category=$(echo "$categories" | sed -n "${choice}p")
+    if [ -n "$selected_category" ]; then
         echo "Entries in category: $selected_category"
         echo "----------------------------------------"
-        find "$KB_DIR" -type f -name "*.txt" -exec grep -l "Category: $selected_category" {} \; | while read -r file; do
+        find "$KB_DIR" -type f -name "*md" -exec grep -l "Category: $selected_category" {} \; | while read -r file; do
             echo "- $(grep "Title:" "$file" | cut -d' ' -f2-)"
         done
     else
@@ -100,7 +100,7 @@ list_by_category() {
             echo
             echo "Category: $category"
             echo "----------------"
-            find "$KB_DIR" -type f -name "*.txt" -exec grep -l "Category: $category" {} \; | while read -r file; do
+            find "$KB_DIR" -type f -name "*md" -exec grep -l "Category: $category" {} \; | while read -r file; do
                 echo "- $(grep "Title:" "$file" | cut -d' ' -f2-)"
             done
         done
@@ -134,10 +134,19 @@ display_kb_menu() {
         echo "3. View Entry"
         echo "4. List by Category"
         echo "5. Delete Entry"
+        echo "6. Create Template"
+        echo "7. Edit Template"
         echo "0. Back to Main Menu"
         echo
         
-        read -p "Select an option: " choice
+        local choice=$(echo "1. Create Entry
+2. Edit Entry
+3. View Entry
+4. List by Category
+5. Delete Entry
+6. Create Template
+7. Edit Template
+0. Back to Main Menu" | fzf --prompt="Select an option> " | cut -d'.' -f1)
         
         case $choice in
             1)
@@ -154,6 +163,12 @@ display_kb_menu() {
                 ;;
             5)
                 delete_kb_entry
+                ;;
+            6)
+                create_template "knowledge_base"
+                ;;
+            7)
+                edit_template "knowledge_base"
                 ;;
             0)
                 return 0

@@ -23,6 +23,9 @@ remove_focusflow() {
         
         # Remove installation
         rm -rf "$INSTALL_DIR"
+        rm -rf "$backup_dir/data"
+        rm -rf "$backup_dir/templates"
+        rm -rf "$backup_dir/config"
     fi
     
     # Remove launcher
