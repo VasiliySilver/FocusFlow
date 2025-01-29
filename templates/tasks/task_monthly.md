@@ -1,7 +1,23 @@
-Title:
-Priority:
-Due Date: $(date -d "+1 month" +%Y-%m-%d)
+Title: $(title)
+Priority: $(priority)
+Due Date: $(due_date)
 Status: Todo
-Created: $(date +%Y-%m-%d %H:%M:%S)
+Created: $(created)
 Pomodoros: 0
+Repeat: Monthly
+
 Description:
+
+Monthly Checklist:
+- [ ] Review previous month
+- [ ] Set monthly goals
+- [ ] Budget review
+- [ ] Team performance review
+- [ ] Monthly reports
+- [ ] Plan next month
+
+Notes:
+- Monthly objectives
+- Key performance indicators
+- Budget considerations
+- Long-term planning updates

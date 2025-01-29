@@ -1,16 +1,16 @@
 #!/bin/bash
 
 # Base directory of the project
-readonly BASE_DIR="/home/user/Nextcloud/Projects/home/FocusFlow"
-readonly CONFIG_FILE="$BASE_DIR/config/app_config.ini"
-readonly LOG_FILE="$BASE_DIR/logs/app.log"
+BASE_DIR="/home/user/Nextcloud/Projects/home/FocusFlow"
+CONFIG_FILE="$BASE_DIR/config/app_config.ini"
+LOG_FILE="$BASE_DIR/logs/app.log"
 
 # Colors for terminal output
-readonly RED='\033[0;31m'
-readonly GREEN='\033[0;32m'
-readonly YELLOW='\033[1;33m'
-readonly BLUE='\033[0;34m'
-readonly NC='\033[0m' # No Color
+RED='\033[0;31m'
+GREEN='\033[0;32m'
+YELLOW='\033[1;33m'
+BLUE='\033[0;34m'
+NC='\033[0m' # No Color
 
 # Logging function
 log() {
@@ -117,8 +117,7 @@ validate_date() {
 # Get filename safe string
 get_safe_filename() {
     local string="$1"
-    # Replace spaces with underscores and remove special characters
-    echo "$string" | tr ' ' '_' | tr -cd '[:alnum:]_-'
+    echo "${string}"
 }
 
 # Select template using fzf

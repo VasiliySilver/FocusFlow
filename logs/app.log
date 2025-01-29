@@ -40,3 +40,156 @@
 [2025-01-28 01:00:41] [INFO] Knowledge base entry created: /home/user/Nextcloud/Projects/home/FocusFlow/data/knowledge_base/1_1md
 [2025-01-28 01:00:48] [INFO] Created new file: /home/user/Nextcloud/Projects/home/FocusFlow/data/knowledge_base/a_amd
 [2025-01-28 01:01:55] [INFO] Knowledge base entry created: /home/user/Nextcloud/Projects/home/FocusFlow/data/knowledge_base/a_amd
+[2025-01-28 09:34:48] [INFO] Created new file: /home/user/Nextcloud/Projects/home/FocusFlow/data/tasks/____2025-01-28md
+[2025-01-28 09:35:16] [INFO] Task created: /home/user/Nextcloud/Projects/home/FocusFlow/data/tasks/____2025-01-28md
+[2025-01-28 09:36:35] [INFO] Task deleted: /home/user/Nextcloud/Projects/home/FocusFlow/data/tasks/1_2025-01-28md
+[2025-01-28 09:36:43] [INFO] Task deleted: /home/user/Nextcloud/Projects/home/FocusFlow/data/tasks/2_2025-01-28md
+[2025-01-28 09:36:59] [INFO] Task deleted: /home/user/Nextcloud/Projects/home/FocusFlow/data/tasks/check_2025-01-28md
+[2025-01-28 09:37:21] [INFO] Task deleted: /home/user/Nextcloud/Projects/home/FocusFlow/data/tasks/hi_2025-01-28md
+[2025-01-28 10:24:49] [WARNING] Invalid option selected
+[2025-01-28 10:27:51] [INFO] Task deleted: /home/user/Nextcloud/Projects/home/FocusFlow/data/tasks/____2025-01-28md
+[2025-01-28 10:39:10] [INFO] Created new file: /home/user/Nextcloud/Projects/home/FocusFlow/data/tasks/active/check_2025-01-28.md
+[2025-01-28 10:39:16] [INFO] Task created: /home/user/Nextcloud/Projects/home/FocusFlow/data/tasks/active/check_2025-01-28.md
+[2025-01-28 10:39:32] [INFO] Created new file: /home/user/Nextcloud/Projects/home/FocusFlow/data/tasks/active/check_2025-01-28.md
+[2025-01-28 10:39:36] [INFO] Task created: /home/user/Nextcloud/Projects/home/FocusFlow/data/tasks/active/check_2025-01-28.md
+[2025-01-28 10:40:43] [INFO] Created new file: /home/user/Nextcloud/Projects/home/FocusFlow/data/tasks/active/hello_2025-01-28.md
+[2025-01-28 10:44:44] [INFO] Task created: /home/user/Nextcloud/Projects/home/FocusFlow/data/tasks/active/hello_2025-01-28.md
+[2025-01-28 10:44:45] [WARNING] Invalid option selected
+[2025-01-28 10:54:32] [WARNING] Invalid option selected
+[2025-01-28 10:54:47] [WARNING] Invalid option selected
+[2025-01-28 10:54:49] [WARNING] Invalid option selected
+[2025-01-28 10:54:51] [WARNING] Invalid option selected
+[2025-01-28 11:02:28] [INFO] Task created: /home/user/Nextcloud/Projects/home/FocusFlow/data/tasks/active/hello_2025-01-28.md
+[2025-01-28 11:02:48] [WARNING] Invalid option selected
+[2025-01-28 11:03:26] [INFO] Task created: /home/user/Nextcloud/Projects/home/FocusFlow/data/tasks/active/check_2025-01-28.md
+[2025-01-28 11:10:47] [WARNING] Invalid option selected
+[2025-01-28 11:11:55] [INFO] Task created: /home/user/Nextcloud/Projects/home/FocusFlow/data/tasks/active/hello_2025-01-08.md
+[2025-01-28 14:17:13] [INFO] Task created: /home/user/Nextcloud/Projects/home/FocusFlow/data/tasks/active/hello_2025-01-29.md
+[2025-01-28 14:19:07] [WARNING] Invalid option selected
+[2025-01-28 14:19:13] [WARNING] Invalid option selected
+[2025-01-28 14:24:06] [INFO] Created new file: /home/user/Nextcloud/Projects/home/FocusFlow/data/notes/hello_20250128md
+[2025-01-28 14:24:11] [INFO] Note created: /home/user/Nextcloud/Projects/home/FocusFlow/data/notes/hello_20250128md
+[2025-01-29 20:01:53] [WARNING] Invalid option selected
+[2025-01-29 20:02:11] [WARNING] Invalid option selected
+[2025-01-29 20:12:56] [INFO] Task created: /home/user/Nextcloud/Projects/home/FocusFlow/data/tasks/active/hello_NoDueDate.md
+[2025-01-29 20:16:46] [INFO] Task created: /home/user/Nextcloud/Projects/home/FocusFlow/data/tasks/active/hello_NoDueDate.md
+[2025-01-29 20:23:44] [INFO] Task created: /home/user/Nextcloud/Projects/home/FocusFlow/data/tasks/active/hello_NoDueDate.md
+[2025-01-29 20:42:17] [INFO] Task created: /home/user/Nextcloud/Projects/home/FocusFlow/data/tasks/active/hello_NoDueDate.md
+[2025-01-29 20:42:42] [INFO] Created new file: /home/user/Nextcloud/Projects/home/FocusFlow/data/notes/hello_20250129md
+[2025-01-29 20:42:46] [INFO] Note created: /home/user/Nextcloud/Projects/home/FocusFlow/data/notes/hello_20250129md
+[2025-01-29 20:44:16] [INFO] Task created: /home/user/Nextcloud/Projects/home/FocusFlow/data/tasks/active/hello_NoDueDate.md
+[2025-01-29 20:44:58] [INFO] Task created: /home/user/Nextcloud/Projects/home/FocusFlow/data/tasks/active/asdlf_NoDueDate.md
+[2025-01-29 20:54:00] [INFO] Task created: /home/user/Nextcloud/Projects/home/FocusFlow/data/tasks/active/hello_NoDueDate.md
+[2025-01-29 22:27:48] [INFO] Task created: /home/user/Nextcloud/Projects/home/FocusFlow/data/tasks/active/check_NoDueDate.md
+[2025-01-29 22:42:11] [INFO] Task created: /home/user/Nextcloud/Projects/home/FocusFlow/data/tasks/active/_2025-01-30.md
+[2025-01-29 23:05:23] [INFO] Task created: /home/user/Nextcloud/Projects/home/FocusFlow/data/tasks/active/_NoDueDate.md
+[2025-01-29 23:16:42] [INFO] Task created: /home/user/Nextcloud/Projects/home/FocusFlow/data/tasks/active/_NoDueDate.md
+[2025-01-29 23:42:32] [INFO] Task created: /home/user/Nextcloud/Projects/home/FocusFlow/data/tasks/active/hi_2025-01-29_23-42-27_NoDueDate.md
+[2025-01-29 23:55:57] [INFO] Task created: /home/user/Nextcloud/Projects/home/FocusFlow/data/tasks/active/hello_2025-01-29_23-55-54_Todo_NoDueDate_High_2025-01-29_23-55-54_none.md
+[2025-01-29 23:57:21] [INFO] Task created: /home/user/Nextcloud/Projects/home/FocusFlow/data/tasks/active/hello_2025-01-29_23-57-18_Todo_NoDueDate_High_2025-01-29_23-57-18_none.md
+[2025-01-29 23:57:42] [INFO] Task completed and moved to completed folder
+[2025-01-29 23:58:53] [INFO] Task created: /home/user/Nextcloud/Projects/home/FocusFlow/data/tasks/active/hello_2025-01-29_23-58-46_Todo_NoDueDate_High_2025-01-29_23-58-46_none.md
+[2025-01-30 00:06:14] [INFO] Task created: /home/user/Nextcloud/Projects/home/FocusFlow/data/tasks/active/hello_2025-01-30_00-06-12_Todo_NoDueDate_High_2025-01-30_00-06-12_none.md
+[2025-01-30 00:09:18] [INFO] Task created: /home/user/Nextcloud/Projects/home/FocusFlow/data/tasks/active/hello_2025-01-30_00-09-15_Todo_NoDueDate_High_2025-01-30_00-09-15_none.md
+[2025-01-30 00:14:55] [INFO] Task created: /home/user/Nextcloud/Projects/home/FocusFlow/data/tasks/active/hello_2025-01-30_00-14-50_Todo_NoDueDate_High_2025-01-30_00-14-50_none.md
+[2025-01-30 00:15:25] [INFO] Task moved to: /home/user/Nextcloud/Projects/home/FocusFlow/data/tasks/trash
+[2025-01-30 00:15:30] [INFO] Task moved to trash: /home/user/Nextcloud/Projects/home/FocusFlow/data/tasks/active/hello_2025-01-30_00-14-50_Todo_NoDueDate_High_2025-01-30_00-14-50_none.md
+[2025-01-30 00:15:35] [INFO] Task moved to trash: /home/user/Nextcloud/Projects/home/FocusFlow/data/tasks/active/hello_2025-01-30_00-09-15_Todo_NoDueDate_High_2025-01-30_00-09-15_none.md
+[2025-01-30 00:15:40] [INFO] Task moved to trash: /home/user/Nextcloud/Projects/home/FocusFlow/data/tasks/active/hello_2025-01-29_23-55-54_Todo_NoDueDate_High_2025-01-29_23-55-54_none.md
+[2025-01-30 00:15:46] [INFO] Task moved to trash: /home/user/Nextcloud/Projects/home/FocusFlow/data/tasks/active/hello_2025-01-29_23-58-46_Todo_NoDueDate_High_2025-01-29_23-58-46_none.md
+[2025-01-30 00:16:09] [INFO] Task created: /home/user/Nextcloud/Projects/home/FocusFlow/data/tasks/active/test_1_2025-01-30_00-16-05_Todo_NoDueDate_High_2025-01-30_00-16-05_none.md
+[2025-01-30 00:31:05] [INFO] Task created: /home/user/Nextcloud/Projects/home/FocusFlow/data/tasks/active/task_1_2025-01-30_00-30-59__Todo__NoDueDate__High__2025-01-30_00-30-59__none.md
+[2025-01-30 00:43:42] [INFO] Task created: /home/user/Nextcloud/Projects/home/FocusFlow/data/tasks/active/hi20250130004337__Todo__NoDueDate__High__2025-01-30_00-43-37__none.md
+[2025-01-30 00:44:34] [INFO] Task moved to: /home/user/Nextcloud/Projects/home/FocusFlow/data/tasks/trash
+[2025-01-30 00:44:51] [INFO] Task created: /home/user/Nextcloud/Projects/home/FocusFlow/data/tasks/active/hello20250130004448__Todo__NoDueDate__High__2025-01-30_00-44-48__none.md
+[2025-01-30 00:54:49] [INFO] Task created: /home/user/Nextcloud/Projects/home/FocusFlow/data/tasks/active/my new task__Todo__NoDueDate__High__2025-01-30_00-54-45__none.md
+[2025-01-30 00:55:40] [INFO] Subtask added to: /home/user/Nextcloud/Projects/home/FocusFlow/data/tasks/active/my new task__Todo__NoDueDate__High__2025-01-30_00-54-45__2025-01-30_00-55-40.md
+[2025-01-30 00:55:51] [INFO] Task completed and moved to completed folder
+[2025-01-30 00:56:02] [INFO] Task created: /home/user/Nextcloud/Projects/home/FocusFlow/data/tasks/active/hi__Todo__NoDueDate__High__2025-01-30_00-55-59__none.md
+[2025-01-30 01:01:34] [INFO] Task created: /home/user/Nextcloud/Projects/home/FocusFlow/data/tasks/active/hello__Todo__NoDueDate__High__2025-01-30_01-01-30__none.md
+[2025-01-30 01:02:09] [INFO] Task created: /home/user/Nextcloud/Projects/home/FocusFlow/data/tasks/active/check__Todo__2025-02-10__High__2025-01-30_01-02-06__none.md
+[2025-01-30 01:02:52] [INFO] Created new file: /home/user/Nextcloud/Projects/home/FocusFlow/data/notes/hello_20250130md
+[2025-01-30 01:02:57] [INFO] Note created: /home/user/Nextcloud/Projects/home/FocusFlow/data/notes/hello_20250130md
+[2025-01-30 01:03:17] [INFO] Note edited: /home/user/Nextcloud/Projects/home/FocusFlow/data/notes/hello_20250129md
+[2025-01-30 01:03:43] [INFO] Created new file: /home/user/Nextcloud/Projects/home/FocusFlow/data/knowledge_base/hellomd
+[2025-01-30 01:03:48] [INFO] Knowledge base entry created: /home/user/Nextcloud/Projects/home/FocusFlow/data/knowledge_base/hellomd
+[2025-01-30 01:04:06] [INFO] Created new file: /home/user/Nextcloud/Projects/home/FocusFlow/data/knowledge_base/some_somemd
+[2025-01-30 01:04:09] [INFO] Knowledge base entry created: /home/user/Nextcloud/Projects/home/FocusFlow/data/knowledge_base/some_somemd
+[2025-01-30 01:21:16] [WARNING] Invalid option selected
+[2025-01-30 01:21:38] [INFO] Knowledge base entry edited: /home/user/Nextcloud/Projects/home/FocusFlow/data/knowledge_base/some_somemd
+[2025-01-30 01:21:55] [INFO] Knowledge base entry edited: /home/user/Nextcloud/Projects/home/FocusFlow/data/knowledge_base/some_somemd
+[2025-01-30 01:38:41] [ERROR] Title cannot be empty
+[2025-01-30 01:38:41] [WARNING] Invalid option selected
+[2025-01-30 01:38:41] [ERROR] Title cannot be empty
+[2025-01-30 01:38:41] [WARNING] Invalid option selected
+[2025-01-30 01:38:41] [ERROR] Title cannot be empty
+[2025-01-30 01:38:41] [WARNING] Invalid option selected
+[2025-01-30 01:38:41] [ERROR] Title cannot be empty
+[2025-01-30 01:38:41] [WARNING] Invalid option selected
+[2025-01-30 01:38:41] [ERROR] Title cannot be empty
+[2025-01-30 01:38:41] [WARNING] Invalid option selected
+[2025-01-30 01:38:41] [WARNING] Invalid option selected
+[2025-01-30 01:38:42] [ERROR] Title cannot be empty
+[2025-01-30 01:38:42] [WARNING] Invalid option selected
+[2025-01-30 01:38:42] [ERROR] Title cannot be empty
+[2025-01-30 01:38:42] [ERROR] Title cannot be empty
+[2025-01-30 01:38:42] [ERROR] Title cannot be empty
+[2025-01-30 01:38:42] [WARNING] Invalid option selected
+[2025-01-30 01:38:42] [WARNING] Invalid option selected
+[2025-01-30 01:38:42] [ERROR] Title cannot be empty
+[2025-01-30 01:38:42] [ERROR] Title cannot be empty
+[2025-01-30 01:38:42] [ERROR] Title cannot be empty
+[2025-01-30 01:38:42] [ERROR] Title cannot be empty
+[2025-01-30 01:38:42] [ERROR] Title cannot be empty
+[2025-01-30 01:38:42] [WARNING] Invalid option selected
+[2025-01-30 01:38:43] [WARNING] Invalid option selected
+[2025-01-30 01:38:43] [WARNING] Invalid option selected
+[2025-01-30 01:38:43] [WARNING] Invalid option selected
+[2025-01-30 01:38:43] [ERROR] Title cannot be empty
+[2025-01-30 01:38:43] [WARNING] Invalid option selected
+[2025-01-30 01:38:43] [WARNING] Invalid option selected
+[2025-01-30 01:38:43] [ERROR] Title cannot be empty
+[2025-01-30 01:38:43] [WARNING] Invalid option selected
+[2025-01-30 01:38:43] [ERROR] Title cannot be empty
+[2025-01-30 01:38:43] [WARNING] Invalid option selected
+[2025-01-30 01:38:43] [WARNING] Invalid option selected
+[2025-01-30 01:38:43] [ERROR] Title cannot be empty
+[2025-01-30 01:38:43] [ERROR] Title cannot be empty
+[2025-01-30 01:38:43] [WARNING] Invalid option selected
+[2025-01-30 01:38:44] [ERROR] Title cannot be empty
+[2025-01-30 01:38:44] [WARNING] Invalid option selected
+[2025-01-30 01:38:44] [ERROR] Title cannot be empty
+[2025-01-30 01:38:44] [WARNING] Invalid option selected
+[2025-01-30 01:38:44] [ERROR] Title cannot be empty
+[2025-01-30 01:38:44] [WARNING] Invalid option selected
+[2025-01-30 01:38:44] [ERROR] Title cannot be empty
+[2025-01-30 01:38:44] [ERROR] Title cannot be empty
+[2025-01-30 01:38:44] [ERROR] Title cannot be empty
+[2025-01-30 01:38:44] [ERROR] Title cannot be empty
+[2025-01-30 01:38:44] [ERROR] Title cannot be empty
+[2025-01-30 01:38:45] [ERROR] Title cannot be empty
+[2025-01-30 01:38:45] [WARNING] Invalid option selected
+[2025-01-30 01:38:45] [ERROR] Title cannot be empty
+[2025-01-30 01:38:45] [ERROR] Title cannot be empty
+[2025-01-30 01:38:45] [WARNING] Invalid option selected
+[2025-01-30 01:40:46] [INFO] Knowledge base entry created: /home/user/Nextcloud/Projects/home/FocusFlow/data/knowledge_base/hello/20250130_014040_hello.md
+[2025-01-30 01:43:38] [ERROR] Invalid file selection
+[2025-01-30 01:45:32] [INFO] Knowledge base entry created: /home/user/Nextcloud/Projects/home/FocusFlow/data/knowledge_base/hi/20250130_014332_hi.md
+[2025-01-30 01:45:46] [ERROR] Invalid file selection
+[2025-01-30 01:48:08] [INFO] Knowledge base entry created: /home/user/Nextcloud/Projects/home/FocusFlow/data/knowledge_base/c/20250130_014538_c.md
+[2025-01-30 01:48:11] [WARNING] Invalid option selected
+[2025-01-30 01:49:07] [INFO] File attached: analyze_db.py
+[2025-01-30 01:49:13] [INFO] Knowledge base entry created: /home/user/Nextcloud/Projects/home/FocusFlow/data/knowledge_base/ck/20250130_014857_ck.md
+[2025-01-30 01:49:28] [INFO] No attachments found for this entry
+[2025-01-30 01:49:55] [INFO] Knowledge base entry created: /home/user/Nextcloud/Projects/home/FocusFlow/data/knowledge_base/asdf/20250130_014949_asdf.md
+[2025-01-30 01:51:28] [INFO] No attachments found for this entry
+[2025-01-30 01:51:38] [INFO] No attachments found for this entry
+[2025-01-30 01:51:41] [ERROR] Title cannot be empty
+[2025-01-30 01:51:43] [ERROR] Title cannot be empty
+[2025-01-30 01:51:47] [INFO] No attachments found for this entry
+[2025-01-30 01:51:53] [INFO] No attachments found for this entry
+[2025-01-30 01:52:52] [INFO] File attached: analyze_db.py
+[2025-01-30 01:53:12] [INFO] File attached: analyze_db.py
+[2025-01-30 01:53:16] [INFO] Knowledge base entry created: /home/user/Nextcloud/Projects/home/FocusFlow/data/knowledge_base/a/20250130_015217_a.md
+[2025-01-30 01:54:03] [INFO] Attachment removed: 20250130_015312_analyze_db.py
+[2025-01-30 01:54:07] [INFO] Attachment removed: 20250130_015252_analyze_db.py

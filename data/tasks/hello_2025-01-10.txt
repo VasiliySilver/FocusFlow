@@ -1,7 +1,0 @@
-Title: 
-Priority: Low
-Due Date: 2025-01-10
-Status: Todo
-Pomodoros: 0
-
-Description:

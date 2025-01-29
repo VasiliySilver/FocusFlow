@@ -1,48 +1,30 @@
 #!/bin/bash
 # uninstall.sh
 
-remove_focusflow() {
-    echo "Uninstalling FocusFlow..."
-    
-    # Ask about data preservation
-    read -p "Do you want to keep your data? (Y/n) " keep_data
-    
-    if [[ $keep_data =~ ^[Nn]$ ]]; then
-        echo "Creating final backup before removal..."
-        "$INSTALL_DIR/backup.sh"
+# Папка для установки
+INSTALL_DIR="$HOME/.local/share/focusflow"
+
+uninstall() {
+    echo "Вы уверены, что хотите удалить FocusFlow? (y/N)"
+    read -r response
+    if [[ "$response" =~ ^[Yy]$ ]]; then
+        # echo "Вы хотите сохранить данные? (Y/n)"
+        # read -r keep_data
         
-        echo "Removing FocusFlow data..."
-        rm -rf "$INSTALL_DIR"
-    else
-        # Move data to backup location
-        backup_dir="$HOME/focusflow_data_backup_$(date +%Y%m%d_%H%M%S)"
-        echo "Moving data to: $backup_dir"
-        mv "$INSTALL_DIR/data" "$backup_dir"
-        mv "$INSTALL_DIR/templates" "$backup_dir"
-        mv "$INSTALL_DIR/config" "$backup_dir"
+        # if [[ "$keep_data" =~ ^[Nn] ]]; then
+        #     echo "Удаляю все данные и настройки..."
+        #     # Удаление директорий с данными
+        #     rm -rf "$INSTALL_DIR/data"
+        #     rm -rf "$INSTALL_DIR/config"
+        #     rm -rf "$INSTALL_DIR/templates"
+        #     rm -rf "$INSTALL_DIR/logs"
+        #     rm -rf "$INSTALL_DIR/sounds"
+        # fi
         
-        # Remove installation
+        echo "Удаляю файлы приложения..."
         rm -rf "$INSTALL_DIR"
-        rm -rf "$backup_dir/data"
-        rm -rf "$backup_dir/templates"
-        rm -rf "$backup_dir/config"
-    fi
-    
-    # Remove launcher
-    rm -f "$BIN_DIR/focusflow"
-    
-    # Remove PATH entry
-    sed -i '/# FocusFlow PATH/d' "$HOME/.bashrc"
-    sed -i '/export PATH=.*focusflow/d' "$HOME/.bashrc"
-    
-    echo "FocusFlow uninstalled successfully!"
-    if [[ ! $keep_data =~ ^[Nn]$ ]]; then
-        echo "Your data has been preserved in: $backup_dir"
+        echo "FocusFlow успешно удален!"
     fi
 }
 
-# Confirm uninstallation
-read -p "Are you sure you want to uninstall FocusFlow? (y/N) " confirm
-if [[ $confirm =~ ^[Yy]$ ]]; then
-    remove_focusflow
-fi
+uninstall

@@ -1,8 +1,8 @@
-Title: 
-Priority: (High/Medium/Low)
-Due Date: 
-Status: (Todo/In Progress/Done)
-Created: $(date +%Y-%m-%d %H:%M:%S)
+Title: $(title)
+Priority: $(priority)
+Due Date: $(due_date)
+Status: Todo
+Created: $(created)
 Pomodoros: 0
 
 Description:

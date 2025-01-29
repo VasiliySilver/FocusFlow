@@ -1,236 +1,125 @@
 #!/bin/bash
 
-# Source utilities
-source "$(dirname "$0")/utils.sh"
-
-# Initialize script
-init_script
-
-# Constants
-TASKS_DIR="$BASE_DIR/data/tasks"
-TEMPLATES_DIR="$BASE_DIR/templates/tasks"
-
-create_task() {
-    print_title "Create New Task"
-    
-    # Select template
-    local template=$(select_template "tasks")
-    if [ -z "$template" ]; then
-        template="$TEMPLATES_DIR/default_task_templatemd"
-    fi
-    
-    # Get task details
-    read -p "Enter task title: " title
-    if [ -z "$title" ]; then
-        log "ERROR" "Title cannot be empty"
-        return 1
-    fi
-    
-    # Get priority
-    local priority=$(echo "High
-Medium
-Low" | fzf --prompt="Priority (H/M/L)> ")
-    case $priority in
-        High) priority="High";;
-        Medium) priority="Medium";;
-        Low) priority="Low";;
-        *) log "ERROR" "Invalid priority selected"; return 1;;
-    esac
-    
-    # Get due date
-    local due_date=$(date +%Y-%m-%d | fzf --prompt="Due date (YYYY-MM-DD)> ")
-    if ! validate_date "$due_date"; then
-        echo "Please enter a valid date in YYYY-MM-DD format"
-        return 1
-    fi
-    
-    # Create safe filename
-    local filename="$(get_safe_filename "$title")"
-    local filepath="$TASKS_DIR/${filename}_${due_date}md"
-    
-    # Create task from template
-    if create_from_template "$template" "$filepath"; then
-        # Update task details
-        sed -i "s/Priority: .*/Priority: $priority/" "$filepath"
-        sed -i "s/Due Date: .*/Due Date: $due_date/" "$filepath"
-        sed -i "s/Status: .*/Status: Todo/" "$filepath"
-        sed -i "s/Created: .*/Created: $(date +%Y-%m-%d %H:%M:%S)/" "$filepath"
-        
-        # Open task in editor
-        ${EDITOR:-nano} "$filepath"
-        log "INFO" "Task created: $filepath"
-    else
-        log "ERROR" "Failed to create task from template"
-    fi
-}
-
-edit_task() {
-    print_title "Edit Task"
-    
-    local task=$(select_file "$TASKS_DIR" "Select task to edit")
-    if [ -n "$task" ]; then
-        backup_file "$task"
-        ${EDITOR:-nano} "$task"
-        log "INFO" "Task edited: $task"
-    fi
-}
-
-view_task() {
-    print_title "View Task"
-    
-    local task=$(select_file "$TASKS_DIR" "Select task to view")
-    if [ -n "$task" ]; then
-        less "$task"
-    fi
-}
-
-update_task_status() {
-    print_title "Update Task Status"
-    
-    local task=$(select_file "$TASKS_DIR" "Select task to update")
-    if [ -n "$task" ]; then
-        echo "Current status:"
-        grep "Status:" "$task"
-        echo
-        
-        local status=$(echo "Todo
-In Progress
-Done" | fzf --prompt="Select status> ")
-        if [ -n "$status" ]; then
-            backup_file "$task"
-            sed -i "s/Status: .*/Status: $status/" "$task"
-            log "INFO" "Updated task status: $task"
-        fi
-    fi
-}
-
-start_pomodoro() {
-    print_title "Start Pomodoro Timer"
-    
-    local task=$(select_file "$TASKS_DIR" "Select task for Pomodoro")
-    if [ -n "$task" ]; then
-        # Get current pomodoro count
-        local count=$(grep "Pomodoros:" "$task" | cut -d' ' -f2)
-        
-        # Start timer
-        bash "$BASE_DIR/scripts/pomodoro_timer.sh" "$task"
-        
-        # Update pomodoro count if timer completed successfully
-        if [ $? -eq 0 ]; then
-            count=$((count + 1))
-            backup_file "$task"
-            sed -i "s/Pomodoros: .*/Pomodoros: $count/" "$task"
-            log "INFO" "Updated Pomodoro count for task: $task"
-        fi
-    fi
-}
-
-delete_task() {
-    print_title "Delete Task"
-    
-    local task=$(select_file "$TASKS_DIR" "Select task to delete")
-    if [ -n "$task" ]; then
-        read -p "Are you sure you want to delete this task? (y/N) " confirm
-        if [[ $confirm =~ ^[Yy]$ ]]; then
-            backup_file "$task"
-            rm "$task"
-            log "INFO" "Task deleted: $task"
-        fi
-    fi
-}
-
-list_tasks() {
-    print_title "All Tasks"
-    
-    if [ -d "$TASKS_DIR" ] && [ "$(ls -A "$TASKS_DIR")" ]; then
-        echo "Status  Due Date   Priority  Title"
-        echo "--------------------------------"
-        
-        local priorities=("High" "Medium" "Low")
-        for priority in "${priorities[@]}"; do
-            echo "Tasks with priority: $priority"
-            for task in "$TASKS_DIR"/*md; do
-                if [ -f "$task" ]; then
-                    local task_priority=$(grep "Priority:" "$task" | cut -d' ' -f2-)
-                    if [ "$task_priority" = "$priority" ]; then
-                        local status=$(grep "Status:" "$task" | cut -d' ' -f2-)
-                        local due_date=$(grep "Due Date:" "$task" | cut -d' ' -f3-)
-                        local title=$(grep "Title:" "$task" | cut -d' ' -f2-)
-                        printf "%-8s %-10s %-9s %s\n" "$status" "$due_date" "$priority" "$title"
-                    fi
-                fi
-            done
-            echo
-        done
-    else
-        echo "No tasks found."
-    fi
-    
-    read -p "Press Enter to continue..."
-}
+# Source all task-related modules
+source "$(dirname "$0")/tasks_constants.sh"
+source "$(dirname "$0")/tasks_display.sh"
+source "$(dirname "$0")/tasks_core.sh"
+source "$(dirname "$0")/tasks_management.sh"
+source "$(dirname "$0")/tasks_templates.sh"
 
 display_tasks_menu() {
+    local -r MENU_HEIGHT="40%"
+    
     while true; do
+        # Clear screen and show tasks
         clear
-        print_title "Tasks Menu"
         
-        echo "1. Create Task"
-        echo "2. Edit Task"
-        echo "3. View Task"
-        echo "4. Update Task Status"
-        echo "5. Start Pomodoro Timer"
-        echo "6. Delete Task"
-        echo "7. List All Tasks"
-        echo "8. Create Template"
-        echo "9. Edit Template"
-        echo "0. Back to Main Menu"
-        echo
+        # Display tasks by location
+        print_tasks "$ACTIVE_DIR"
         
-        local choice=$(echo "1. Create Task
-2. Edit Task
-3. View Task
-4. Update Task Status
-5. Start Pomodoro Timer
-6. Delete Task
-7. List All Tasks
-8. Create Template
-9. Edit Template
-0. Back to Main Menu" | fzf --prompt="Select an option> " | cut -d'.' -f1)
+        # Show menu with status indications
+        echo -e "\n${GREEN}Tasks Menu:${NC}\n"
         
-        case $choice in
-            1)
-                create_task
+        local menu_items
+        if has_tasks "$ACTIVE_DIR"; then
+            menu_items="➕ New Task
+📅 New Future Task
+▶️ Start Work
+✅ Complete Task
+📝 Add Subtask
+📦 Move Task
+🗑️ Delete Task
+🔍 Search
+✏️ Edit Template
+📄 Create Template
+🔙 Back to Main Menu"
+        else
+            menu_items="➕ New Task
+📅 New Future Task
+▶️ Start Work ${RED}(No active tasks)${NC}
+✅ Complete Task ${RED}(No active tasks)${NC}
+📝 Add Subtask ${RED}(No active tasks)${NC}
+📦 Move Task ${RED}(No active tasks)${NC}
+🗑️ Delete Task ${RED}(No active tasks)${NC}
+🔍 Search
+✏️ Edit Template
+📄 Create Template
+🔙 Back to Main Menu"
+        fi
+        
+        local choice
+        choice=$(echo -e "$menu_items" | fzf --height "$MENU_HEIGHT" \
+                                           --layout=reverse \
+                                           --prompt="Select action: " \
+                                           --ansi)
+        
+        clear  # Clear screen before executing action
+        
+        case "$choice" in
+            "➕ New Task")
+                create_task "$ACTIVE_DIR"
                 ;;
-            2)
-                edit_task
+            "📅 New Future Task")
+                create_task "$FUTURE_DIR"
                 ;;
-            3)
-                view_task
+            "▶️ Start Work"*)
+                if has_tasks "$ACTIVE_DIR"; then
+                    start_work
+                else
+                    show_error "No active tasks available."
+                    read -p "Press Enter to continue..."
+                fi
                 ;;
-            4)
-                update_task_status
+            "✅ Complete Task"*)
+                if has_tasks "$ACTIVE_DIR"; then
+                    complete_task
+                else
+                    show_error "No active tasks available."
+                    read -p "Press Enter to continue..."
+                fi
                 ;;
-            5)
-                start_pomodoro
+            "📝 Add Subtask"*)
+                if has_tasks "$ACTIVE_DIR"; then
+                    add_subtask
+                else
+                    show_error "No active tasks available."
+                    read -p "Press Enter to continue..."
+                fi
                 ;;
-            6)
-                delete_task
+            "📦 Move Task"*)
+                if has_tasks "$ACTIVE_DIR"; then
+                    move_task
+                else
+                    show_error "No active tasks available."
+                    read -p "Press Enter to continue..."
+                fi
                 ;;
-            7)
-                list_tasks
+            "🗑️ Delete Task"*)
+                if has_tasks "$ACTIVE_DIR"; then
+                    delete_task
+                else
+                    show_error "No active tasks available."
+                    read -p "Press Enter to continue..."
+                fi
                 ;;
-            8)
-                create_template "tasks"
+            "🔍 Search")
+                search_tasks
                 ;;
-            9)
-                edit_template "tasks"
+            "✏️ Edit Template")
+                edit_template
                 ;;
-            0)
+            "📄 Create Template")
+                create_template
+                ;;
+            "🔙 Back to Main Menu")
                 return 0
                 ;;
             *)
-                log "WARNING" "Invalid option selected"
-                read -p "Press Enter to continue..."
+                if [ -n "$choice" ]; then
+                    log "WARNING" "Invalid option selected"
+                    show_error "Invalid option selected"
+                    read -p "Press Enter to continue..."
+                fi
                 ;;
         esac
     done

@@ -92,24 +92,24 @@ display_notes_menu() {
         clear
         print_title "Notes Menu"
         
-        echo "1. Create Note"
-        echo "2. Edit Note"
-        echo "3. View Note"
-        echo "4. Delete Note"
-        echo "5. List All Notes"
-        echo "6. Create Template"
-        echo "7. Edit Template"
-        echo "0. Back to Main Menu"
+        echo "1. 📝 Create Note"
+        echo "2. ✏️ Edit Note"
+        echo "3. 📄 View Note"
+        echo "4. 🗑️ Delete Note"
+        echo "5. 📋 List All Notes"
+        echo "6. 📝 Create Template"
+        echo "7. ✏️ Edit Template"
+        echo "0. 🔙 Back to Main Menu"
         echo
         
-        local choice=$(echo "1. Create Note
-2. Edit Note
-3. View Note
-4. Delete Note
-5. List All Notes
-6. Create Template
-7. Edit Template
-0. Back to Main Menu" | fzf --prompt="Select an option> " | cut -d'.' -f1)
+        local choice=$(echo "1. 📝 Create Note
+2. ✏️ Edit Note
+3. 📄 View Note
+4. 🗑️ Delete Note
+5. 📋 List All Notes
+6. 📝 Create Template
+7. ✏️ Edit Template
+0. 🔙 Back to Main Menu" | fzf --prompt="Select an option> " | cut -d'.' -f1)
         
         case $choice in
             1)

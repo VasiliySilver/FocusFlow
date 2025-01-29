@@ -9,15 +9,75 @@ init_script
 # Constants
 KB_DIR="$BASE_DIR/data/knowledge_base"
 TEMPLATES_DIR="$BASE_DIR/templates/knowledge_base"
+ATTACHMENTS_DIR="$BASE_DIR/data/attachments"
+EDITOR="lvim"  # Set default editor to lvim
+
+# Add this to the top of the script with other dependencies
+check_dependencies() {
+    local deps=("zenity")
+    for dep in "${deps[@]}"; do
+        if ! command -v "$dep" &> /dev/null; then
+            log "ERROR" "$dep is required but not installed. Installing..."
+            sudo apt-get update && sudo apt-get install -y "$dep"
+        fi
+    done
+}
+
+# Modified attach_files function with GUI file picker
+attach_files() {
+    local entry_dir="$1"
+    local files_attached=false
+    
+    while true; do
+        read -p "Would you like to attach a file? (y/n): " attach
+        case $attach in
+            [Yy]*)
+                # Use zenity for file selection with a GUI dialog
+                local file_to_attach=$(zenity --file-selection --title="Select a file to attach" 2>/dev/null)
+                
+                if [ $? -eq 0 ] && [ -n "$file_to_attach" ] && [ -f "$file_to_attach" ]; then
+                    # Create attachments directory if it doesn't exist
+                    mkdir -p "$entry_dir/attachments"
+                    
+                    # Copy file to attachments directory
+                    local filename=$(basename "$file_to_attach")
+                    local timestamp=$(date +%Y%m%d_%H%M%S)
+                    local safe_filename="${timestamp}_${filename}"
+                    
+                    cp "$file_to_attach" "$entry_dir/attachments/$safe_filename"
+                    
+                    # Add reference to the markdown file
+                    echo -e "\n## Attachments\n- [$filename](attachments/$safe_filename)" >> "$entry_dir.md"
+                    
+                    log "INFO" "File attached: $filename"
+                    files_attached=true
+                    
+                    # Show success message
+                    zenity --info \
+                        --title="Success" \
+                        --text="File '$filename' has been attached successfully." \
+                        --width=300 2>/dev/null
+                else
+                    zenity --error \
+                        --title="Error" \
+                        --text="No file was selected or the file is invalid." \
+                        --width=300 2>/dev/null
+                fi
+                ;;
+            [Nn]*)
+                break
+                ;;
+            *)
+                log "WARNING" "Please answer y or n"
+                ;;
+        esac
+    done
+    
+    return $files_attached
+}
 
 create_kb_entry() {
     print_title "Create New Knowledge Base Entry"
-    
-    # Select template
-    local template=$(select_template "knowledge_base")
-    if [ -z "$template" ]; then
-        template="$TEMPLATES_DIR/default_kb_templatemd"
-    fi
     
     # Get entry details
     read -p "Enter entry title: " title
@@ -29,146 +89,156 @@ create_kb_entry() {
     read -p "Enter category: " category
     read -p "Enter tags (comma-separated): " tags
     
-    # Create safe filename
-    local filename="$(get_safe_filename "$title")"
-    local filepath="$KB_DIR/${category:+${category}_}${filename}md"
+    # Create timestamp and safe filename
+    local timestamp=$(date +%Y%m%d_%H%M%S)
+    local safe_title="$(echo "$title" | tr '[:upper:]' '[:lower:]' | sed 's/[^a-z0-9]/-/g' | sed 's/--*/-/g' | sed 's/^-//' | sed 's/-$//')"
+    local filename="${timestamp}_${safe_title}"
+    local filepath="$KB_DIR/${category:+${category}/}$filename"
     
-    # Create entry from template
-    if create_from_template "$template" "$filepath"; then
-        # Update entry details
-        sed -i "s/Category: .*/Category: $category/" "$filepath"
-        sed -i "s/Tags: .*/Tags: $tags/" "$filepath"
-        sed -i "s/Created: .*/Created: $(date +%Y-%m-%d\ %H:%M:%S)/" "$filepath"
-        sed -i "s/Last Modified: .*/Last Modified: $(date +%Y-%m-%d\ %H:%M:%S)/" "$filepath"
-        
-        # Open entry in editor
-        ${EDITOR:-nano} "$filepath"
-        log "INFO" "Knowledge base entry created: $filepath"
-    fi
+    # Create category directory if it doesn't exist
+    mkdir -p "$(dirname "$filepath")"
+    
+    # Create entry
+    cat > "$filepath.md" << EOF
+---
+title: $title
+category: $category
+tags: $tags
+created: $(date +%Y-%m-%d\ %H:%M:%S)
+modified: $(date +%Y-%m-%d\ %H:%M:%S)
+---
+
+# $title
+
+EOF
+    
+    # Open in lvim
+    $EDITOR "$filepath.md"
+    
+    # Handle attachments
+    attach_files "$filepath"
+    
+    log "INFO" "Knowledge base entry created: $filepath.md"
 }
 
+# Modify edit_kb_entry to handle attachments
 edit_kb_entry() {
     print_title "Edit Knowledge Base Entry"
     
-    local entry=$(select_file "$KB_DIR" "Select entry to edit")
+    # Use fzf with preview for file selection
+    local entry=$(find "$KB_DIR" -type f -name "*.md" | \
+        fzf --preview 'head -n 10 {}' \
+            --preview-window=right:50% \
+            --prompt="Select entry to edit> ")
+    
     if [ -n "$entry" ]; then
         backup_file "$entry"
-        ${EDITOR:-nano} "$entry"
-        # Update modification date
-        sed -i "s/Last Modified: .*/Last Modified: $(date +%Y-%m-%d)/" "$entry"
+        $EDITOR "$entry"
+        
+        # Handle attachments
+        local entry_dir="${entry%.md}"
+        attach_files "$entry_dir"
+        
+        sed -i "s/modified: .*/modified: $(date +%Y-%m-%d\ %H:%M:%S)/" "$entry"
         log "INFO" "Knowledge base entry edited: $entry"
     fi
 }
 
-view_kb_entry() {
-    print_title "View Knowledge Base Entry"
+# Add function to manage attachments
+manage_attachments() {
+    print_title "Manage Attachments"
     
-    local entry=$(select_file "$KB_DIR" "Select entry to view")
+    local entry=$(find "$KB_DIR" -type f -name "*.md" | \
+        fzf --preview 'head -n 10 {}' \
+            --preview-window=right:50% \
+            --prompt="Select entry to manage attachments> ")
+    
     if [ -n "$entry" ]; then
-        less "$entry"
-    fi
-}
-
-list_by_category() {
-    print_title "List Entries by Category"
-    
-    # Get unique categories
-    local categories=$(find "$KB_DIR" -type f -name "*md" -exec grep "Category:" {} \; | cut -d' ' -f2- | sort -u)
-    
-    if [ -z "$categories" ]; then
-        echo "No categories found."
-        read -p "Press Enter to continue..."
-        return
-    fi
-    
-    echo "Available categories:"
-    echo "$categories" | nl
-    echo
-    
-    local selected_category=$(echo "$categories" | fzf --prompt="Select category (or Enter to see all)> ")
-    
-    if [ -n "$selected_category" ]; then
-        echo "Entries in category: $selected_category"
-        echo "----------------------------------------"
-        find "$KB_DIR" -type f -name "*md" -exec grep -l "Category: $selected_category" {} \; | while read -r file; do
-            echo "- $(grep "Title:" "$file" | cut -d' ' -f2-)"
-        done
-    else
-        echo "All entries by category:"
-        echo "----------------------------------------"
-        echo "$categories" | while read -r category; do
-            echo
-            echo "Category: $category"
-            echo "----------------"
-            find "$KB_DIR" -type f -name "*md" -exec grep -l "Category: $category" {} \; | while read -r file; do
-                echo "- $(grep "Title:" "$file" | cut -d' ' -f2-)"
-            done
-        done
-    fi
-    
-    echo
-    read -p "Press Enter to continue..."
-}
-
-delete_kb_entry() {
-    print_title "Delete Knowledge Base Entry"
-    
-    local entry=$(select_file "$KB_DIR" "Select entry to delete")
-    if [ -n "$entry" ]; then
-        read -p "Are you sure you want to delete this entry? (y/N) " confirm
-        if [[ $confirm =~ ^[Yy]$ ]]; then
-            backup_file "$entry"
-            rm "$entry"
-            log "INFO" "Knowledge base entry deleted: $entry"
+        local entry_dir="${entry%.md}"
+        local attachments_dir="$entry_dir/attachments"
+        
+        if [ ! -d "$attachments_dir" ]; then
+            log "INFO" "No attachments found for this entry"
+            read -p "Press Enter to continue..."
+            return
         fi
+        
+        while true; do
+            clear
+            print_title "Attachment Management"
+            echo "1. View attachments"
+            echo "2. Add new attachment"
+            echo "3. Remove attachment"
+            echo "0. Back"
+            
+            read -p "Select option: " option
+            
+            case $option in
+                1)
+                    local attachment=$(find "$attachments_dir" -type f | \
+                        fzf --preview 'file {}' \
+                            --preview-window=right:50% \
+                            --prompt="Select attachment to view> ")
+                    if [ -n "$attachment" ]; then
+                        xdg-open "$attachment" 2>/dev/null || open "$attachment" 2>/dev/null
+                    fi
+                    ;;
+                2)
+                    attach_files "$entry_dir"
+                    ;;
+                3)
+                    local attachment=$(find "$attachments_dir" -type f | \
+                        fzf --preview 'file {}' \
+                            --preview-window=right:50% \
+                            --prompt="Select attachment to remove> ")
+                    if [ -n "$attachment" ]; then
+                        rm "$attachment"
+                        log "INFO" "Attachment removed: $(basename "$attachment")"
+                    fi
+                    ;;
+                0)
+                    break
+                    ;;
+                *)
+                    log "WARNING" "Invalid option"
+                    ;;
+            esac
+        done
     fi
 }
 
+# Modify display_kb_menu to include attachment management
 display_kb_menu() {
     while true; do
         clear
         print_title "Knowledge Base Menu"
         
-        echo "1. Create Entry"
-        echo "2. Edit Entry"
-        echo "3. View Entry"
-        echo "4. List by Category"
-        echo "5. Delete Entry"
-        echo "6. Create Template"
-        echo "7. Edit Template"
-        echo "0. Back to Main Menu"
-        echo
-        
-        local choice=$(echo "1. Create Entry
-2. Edit Entry
-3. View Entry
-4. List by Category
-5. Delete Entry
-6. Create Template
-7. Edit Template
-0. Back to Main Menu" | fzf --prompt="Select an option> " | cut -d'.' -f1)
+        local choice=$(echo "1. 🆕 Create Entry
+2. 📝 Quick Note (Today's Journal)
+3. 🔍 Search Entries
+4. 📅 Recent Entries
+5. 📂 Browse Categories
+6. 📎 Manage Attachments
+0. 🔙 Exit" | fzf --prompt="Select an option> " --preview 'echo "Select an option to continue..."' | cut -d'.' -f1)
         
         case $choice in
             1)
                 create_kb_entry
                 ;;
             2)
-                edit_kb_entry
+                create_daily_note
                 ;;
             3)
-                view_kb_entry
+                search_kb
                 ;;
             4)
-                list_by_category
+                show_recent
                 ;;
             5)
-                delete_kb_entry
+                list_by_category
                 ;;
             6)
-                create_template "knowledge_base"
-                ;;
-            7)
-                edit_template "knowledge_base"
+                manage_attachments
                 ;;
             0)
                 return 0
@@ -180,6 +250,11 @@ display_kb_menu() {
         esac
     done
 }
+
+# Rest of the script remains unchanged...
+
+# Ensure required directories exist
+mkdir -p "$KB_DIR" "$TEMPLATES_DIR" "$ATTACHMENTS_DIR"
 
 # Start the knowledge base menu
 display_kb_menu

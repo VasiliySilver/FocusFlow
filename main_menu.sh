@@ -11,24 +11,24 @@ display_main_menu() {
         clear
         print_title "FocusFlow - Main Menu"
         
-        echo "1. Notes"
-        echo "2. Tasks"
-        echo "3. Knowledge Base"
-        echo "4. Search"
-        echo "5. Backup Data"
-        echo "6. Create Template"
-        echo "7. Edit Template"
-        echo "0. Exit"
+        echo "1. 📒 Notes"
+        echo "2. ✅ Tasks"
+        echo "3. 📚 Knowledge Base"
+        echo "4. 🔍 Search"
+        echo "5. 💾 Backup Data"
+        echo "6. 📝 Create Template"
+        echo "7. ✏️ Edit Template"
+        echo "0. ❌ Exit"
         echo
         
-        local choice=$(echo "1. Notes
-2. Tasks
-3. Knowledge Base
-4. Search
-5. Backup Data
-6. Create Template
-7. Edit Template
-0. Exit" | fzf --prompt="Select an option> " | cut -d'.' -f1)
+        local choice=$(echo "1. 📒 Notes
+2. ✅ Tasks
+3. 📚 Knowledge Base
+4. 🔍 Search
+5. 💾 Backup Data
+6. 📝 Create Template
+7. ✏️ Edit Template
+0. ❌ Exit" | fzf --prompt="Select an option> " | cut -d'.' -f1)
         
         case $choice in
             1)

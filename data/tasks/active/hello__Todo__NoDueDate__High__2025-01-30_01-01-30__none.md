@@ -1,8 +1,8 @@
-Title: $(title)
+Title: hello
 Priority: High
-Due Date: $(due_date)
+Due Date: No due date
 Status: Todo
-Created: $(created)
+Created: 2025-01-30 01:01:30
 Pomodoros: 0
 
 Description:

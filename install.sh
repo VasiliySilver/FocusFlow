@@ -1,58 +1,35 @@
 #!/bin/bash
 # install.sh
 
-# Base directories
-REPO_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+# Папка для установки
 INSTALL_DIR="$HOME/.local/share/focusflow"
-BIN_DIR="$HOME/.local/bin"
 
-install_focusflow() {
-    echo "Installing FocusFlow..."
+install() {
+    echo "Устанавливаю FocusFlow..."
+    # Создание директорий
+    mkdir -p "$INSTALL_DIR/data/backups"
+    mkdir -p "$INSTALL_DIR/logs"
+    mkdir -p "$INSTALL_DIR/config" 
+    mkdir -p "$INSTALL_DIR/scripts"
     
-    # Create installation directories
-    mkdir -p "$INSTALL_DIR"
-    mkdir -p "$BIN_DIR"
+    # Копирование файлов
+    cp -r data "$INSTALL_DIR/"
+    cp -r templates "$INSTALL_DIR/"
+    cp -r scripts "$INSTALL_DIR/"
+    cp -r config "$INSTALL_DIR/"
+    cp -r sounds "$INSTALL_DIR/"
+    cp backup.sh "$INSTALL_DIR/"
+    cp main_menu.sh "$INSTALL_DIR/"
+    cp CHECKLIST.md "$INSTALL_DIR/"
+    cp config/app_config.ini "$INSTALL_DIR/config/"
     
-    # Copy files
-    cp -r "$REPO_DIR/config" "$INSTALL_DIR/"
-    cp -r "$REPO_DIR/data" "$INSTALL_DIR/"
-    cp -r "$REPO_DIR/scripts" "$INSTALL_DIR/"
-    cp -r "$REPO_DIR/templates" "$INSTALL_DIR/"
+    # Установка прав
+    chmod +x "$INSTALL_DIR/backup.sh"
+    chmod +x "$INSTALL_DIR/main_menu.sh"
+    chmod +x $INSTALL_DIR/scripts/*.sh
     
-    # Create launcher script
-    cat > "$BIN_DIR/focusflow" << EOF
-#!/bin/bash
-exec "$INSTALL_DIR/main_menu.sh" "\$@"
-EOF
-    
-    # Make launcher executable
-    chmod +x "$BIN_DIR/focusflow"
-    
-    # Add bin directory to PATH if not already present
-    if [[ ":$PATH:" != *":$HOME/.local/bin:"* ]]; then
-        echo 'export PATH="$HOME/.local/bin:$PATH"' >> "$HOME/.bashrc"
-        echo 'Please restart your shell or run: source ~/.bashrc'
-    fi
-    
-    # Check dependencies
-    local missing_deps=()
-    for dep in fzf rg; do
-        if ! command -v "$dep" &> /dev/null; then
-            missing_deps+=("$dep")
-        fi
-    done
-    
-    if [ ${#missing_deps[@]} -ne 0 ]; then
-        echo "Warning: Missing dependencies: ${missing_deps[*]}"
-        echo "Please install them using your package manager:"
-        echo "For Ubuntu/Debian: sudo apt install ${missing_deps[*]}"
-        echo "For Fedora: sudo dnf install ${missing_deps[*]}"
-        echo "For Arch: sudo pacman -S ${missing_deps[*]}"
-    fi
-    
-    echo "FocusFlow installed successfully!"
-    echo "Run 'focusflow' to start the application"
+    echo "Установка завершена!"
 }
 
-# Run installation
-install_focusflow
+# Запуск установки
+install
